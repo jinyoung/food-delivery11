@@ -42,13 +42,7 @@ public class FoodCooking  {
     
     
     @ElementCollection
-    @ElementCollection
-    
-    private List<String> options;
-    
-    
-    
-    
+    private List<String> options;    
     
     private String storeId;
     
@@ -70,13 +64,21 @@ public class FoodCooking  {
 
 
     public void accept(AcceptCommand acceptCommand){
-        OrderAccepted orderAccepted = new OrderAccepted(this);
-        orderAccepted.publishAfterCommit();
 
-        OrderRejected orderRejected = new OrderRejected(this);
-        orderRejected.publishAfterCommit();
+        if(acceptCommand.getAccept()){
+            OrderAccepted orderAccepted = new OrderAccepted(this);
+            orderAccepted.publishAfterCommit();
 
+            setStatus("접수됨");
+        }else{
+            OrderRejected orderRejected = new OrderRejected(this);
+            orderRejected.publishAfterCommit();
+
+            setStatus("거절됨");
+
+        }
     }
+    
     public void start(){
         CookStarted cookStarted = new CookStarted(this);
         cookStarted.publishAfterCommit();
@@ -90,11 +92,15 @@ public class FoodCooking  {
 
     public static void 주문정보복제(OrderPlaced orderPlaced){
 
-        /** Example 1:  new item 
+        /** Example 1:  new item  */
         FoodCooking foodCooking = new FoodCooking();
+        foodCooking.setCustomerId(orderPlaced.getCustomerId());
+        foodCooking.setFoodId(orderPlaced.getFoodId());
+        foodCooking.setOrderId(String.valueOf(orderPlaced.getId()));
+        foodCooking.setStatus("미결재");
         repository().save(foodCooking);
 
-        */
+       
 
         /** Example 2:  finding and process
         
@@ -117,16 +123,16 @@ public class FoodCooking  {
 
         */
 
-        /** Example 2:  finding and process
+        /** Example 2:  finding and process */
         
-        repository().findById(paid.get???()).ifPresent(foodCooking->{
+        repository().findByOrderId(paid.getOrderId()).ifPresent(foodCooking->{
             
-            foodCooking // do something
+            foodCooking.setStatus("결재됨"); // do something
             repository().save(foodCooking);
 
 
          });
-        */
+       
 
         
     }

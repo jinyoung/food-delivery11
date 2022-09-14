@@ -66,11 +66,14 @@ public class Delivery  {
 
     public static void 주문정보복제(OrderPlaced orderPlaced){
 
-        /** Example 1:  new item 
+        /** Example 1:  new item       */
         Delivery delivery = new Delivery();
+        delivery.setAddress(orderPlaced.getAddress());
+        delivery.setOrderId(String.valueOf(orderPlaced.getId()));
+        
         repository().save(delivery);
 
-        */
+  
 
         /** Example 2:  finding and process
         

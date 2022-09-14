@@ -32,13 +32,8 @@ public class Order  {
     
     
     @ElementCollection
-    @ElementCollection
-    
     private List<String> options;
-    
-    
-    
-    
+
     
     private String address;
     
